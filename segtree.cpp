@@ -37,6 +37,14 @@ public:
 
 		return ans;
 	}
+
+	void rupdate(int i, int j, int x)
+	{
+		for (i += n, j+=n+1; i < j; i >>= 1, j >>= 1){
+			if (i & 1) sgt[i++] += x;
+			if (j & 1) sgt[--j] += x;
+		}
+	}
 };
 
 //another imp (from https://codeforces.com/blog/entry/18051)
@@ -63,12 +71,40 @@ int query(int l, int r) {  // sum on interval [l, r)
 }
 
 
+void interval_modify(int l, int r, int value) {
+  for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+    if (l&1) t[l++] += value;
+    if (r&1) t[--r] += value;
+  }
+}
+
+int point_query(int p) {
+  int res = 0;
+  for (p += n; p > 0; p >>= 1) res += t[p];
+  return res;
+}
+/* example :
+int main() {
+  scanf("%d", &n);
+  for (int i = 0; i < n; ++i) scanf("%d", t + n + i);
+  build();
+  modify(0, 1);
+  printf("%d\n", query(3, 11));
+  return 0;
+}
+ */
+
+
 int main()
 {
 	vector<int> arr = {4, 5, 7, 8, 9, 12, 13, 15, 1, 45};
 	SegTree st(arr);
 
-	cout << st.query(1, 2) << "\n";
+	cout << st.query(1, 1) << "\n";
+	cout << st.query(1, 3) << "\n";
+	st.rupdate(1, 3, 1);
+	cout << st.query(1, 3) << "\n";
+	cout << st.query(1, 1) << "\n";
 
 	return 0;
 }
